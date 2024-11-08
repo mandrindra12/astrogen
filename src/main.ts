@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
 import { AppModule } from './app.module';
 
 const logger = new Logger('Main.ts');
@@ -45,6 +46,7 @@ async function bootstrap() {
     }),
   );
   app.use(cookieParser());
+  app.use('/public', express.static('/public'));
 
 
   // Listen after setting up the app.
