@@ -48,6 +48,7 @@ export class AuthController {
     if (!user) throw new HttpException('User does not exist', 404);
     if (user.error) {
       res.send({
+        id: user.user_id,
         error: true,
         errorMessage: user.errorMessage,
       });
