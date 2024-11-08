@@ -23,6 +23,22 @@ model nofitications {
   user_id         String @db.Uuid
 }
 
+model flashcards {
+  flashcard_id String @db.Uuid @default(cuid()) @id
+  flashcard_front String 
+  flashcard_back String
+  author_id String @db.Uuid
+  author users @relation(fields: [author_id], references: [user_id])
+}
+
+model quiz {
+  quiz_id String @db.Uuid @default(cuid()) @id
+  quiz_question String 
+  quiz_response String
+  author_id String @db.Uuid
+  author users @relation(fields: [author_id], references: [user_id])
+}
+
 enum conversation_type_enum {
   group
   one_to_one
@@ -85,6 +101,10 @@ model users {
 
   nofitications     nofitications[]
   users_saved_posts users_saved_posts[]
+
+  flashcards flashcards[]
+
+  quiz quiz[]
 }
 
 model sessions {

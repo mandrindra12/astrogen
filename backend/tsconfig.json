@@ -1,5 +1,4 @@
 {
-  "extends": "@viktoo/typescript-config/base.json",
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
