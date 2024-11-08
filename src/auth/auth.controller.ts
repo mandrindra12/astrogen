@@ -48,7 +48,6 @@ export class AuthController {
     if (!user) throw new HttpException('User does not exist', 404);
     if (user.error) {
       res.send({
-        id: user.user_id,
         error: true,
         errorMessage: user.errorMessage,
       });
@@ -56,7 +55,7 @@ export class AuthController {
     }
 
     this.authService.handleJWT(payload, res);
-    res.send({ success: true, message: 'Successfully logged in ' });
+    res.send({error: false, errorMessage: "", user_id: user.user_id, username: user.name});
   }
 
   @Get('logout')

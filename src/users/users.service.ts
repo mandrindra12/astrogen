@@ -34,7 +34,7 @@ export class UsersService {
     });
 
     const userEntity: UserEntity = instanceToInstance(
-      new UserEntity(userData),
+      new UserEntity(userData ?? null),
       {
         excludeExtraneousValues: true,
       },
