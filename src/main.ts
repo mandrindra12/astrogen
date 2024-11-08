@@ -7,7 +7,7 @@ import { AppModule } from './app.module';
 
 const logger = new Logger('Main.ts');
 
-const selectedPort = process.env.PORT ?? 3000;
+const selectedPort = process.env.PORT ?? 80;
 const selectedIP = process.env.IP ?? 'localhost';
 
 const redisURL = process.env.REDIS_URL || 'redis://localhost:6379';
