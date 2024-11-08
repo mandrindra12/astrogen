@@ -19,7 +19,8 @@ model nofitications {
   receiver_name   String
   content         String
   date            DateTime @default(now()) @db.Timestamp(6)
-  users           users[]
+  users           users   @relation(fields: [user_id], references: [user_id])
+  user_id         String @db.Uuid
 }
 
 enum conversation_type_enum {
