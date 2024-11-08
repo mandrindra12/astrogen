@@ -72,6 +72,9 @@ model users {
   user_posts    posts[]
   user_comments comments[]
 
+  followers  users[] @relation("user_follows")
+  followings users[] @relation("user_follows")
+
   // chat
   messages      messages[]
   conversations conversations[]
