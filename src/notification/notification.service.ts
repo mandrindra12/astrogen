@@ -61,6 +61,11 @@ export class NotificationService {
             content: notification.content,
             receiver_name: recipientExist.name!,
             sender_name: senderExist.name!,
+            users: {
+              connect: {
+                user_id: recipientExist.name!,
+              }
+            }
           },
         });
       } else throw new Error('Make sure both user exists!');

@@ -1,9 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateFlashcardDto } from './dto/create-flashcard.dto';
+import { UpdateFlashcardDto } from './dto/update-flashcard.dto';
 
 @Injectable()
 export class FlashcardService {
+  update(arg0: number, updateFlashcardDto: UpdateFlashcardDto) {
+    throw new Error('Method not implemented.');
+  }
   private logger = new Logger(FlashcardService.name);
   constructor(private readonly prisma: PrismaService) {}
   async create(createFlashcardDto: CreateFlashcardDto) {
