@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { FileUpload } from './entity/file-upload.entity';
 import { instanceToInstance } from 'class-transformer';
 import { FileTypeEnum } from '../enums/file-type-enum';
+import { PrismaService } from '../prisma/prisma.service';
+import { FileUpload } from './entity/file-upload.entity';
 
 @Injectable()
 export class UploadService {
@@ -37,7 +37,7 @@ export class UploadService {
     const uploadname = file.path.split('/').at(-1);
     const fileUrl = `${process.env.BASE_URL}/uploaded_files/${uploadSubDir}/${uploadname}`;
     const fileType =
-      (this.getFileType(file.mimetype) as FileTypeEnum) ?? 'image';
+      (this.getFileType(file.mimetype) as FileTypeEnum);
     if (postId) {
       const fileUpload: FileUpload = instanceToInstance(
         new FileUpload({

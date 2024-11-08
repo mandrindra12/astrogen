@@ -1,3 +1,4 @@
+import { account_type } from '@prisma/client';
 import { Expose } from 'class-transformer';
 import {
   IsEmail,
@@ -5,7 +6,6 @@ import {
   IsOptional,
   IsStrongPassword,
 } from 'class-validator';
-import { UserAccountTypeEnum } from '../../enums/user-account-type.enum';
 import { GenderEnum } from '../../enums/gender.enum';
 
 export class UpdateUserDto {
@@ -18,7 +18,7 @@ export class UpdateUserDto {
   @IsStrongPassword()
   password?: string;
 
-  @Expose() @IsOptional() user_account_type?: UserAccountTypeEnum;
+  @Expose() @IsOptional() user_account_type?: account_type;
   @Expose() @IsOptional() gender?: GenderEnum;
 
   constructor(init?: Partial<UpdateUserDto>) {
