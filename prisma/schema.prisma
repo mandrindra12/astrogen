@@ -13,10 +13,10 @@ enum gender_enum {
   female
 }
 
-model nofitications {
+model notifications {
   notification_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  sender_name     String   @db.Uuid
-  receiver_name   String   @db.Uuid
+  sender_name     String  
+  receiver_name   String   
   content         String
   date            DateTime @default(now()) @db.Timestamp(6)
   users           users    @relation(fields: [user_id], references: [user_id])
@@ -82,7 +82,7 @@ model users {
   // sessions
   user_sessions sessions[]
 
-  nofitications     nofitications[]
+  nofitications     notifications[]
   users_saved_posts users_saved_posts[]
 
   flashcards flashcards[]
@@ -212,7 +212,7 @@ model messages {
 }
 
 model quiz {
-  quiz_id       String @id @default(cuid()) @db.Uuid
+  quiz_id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   quiz_level    Int
   quiz_question String
   quiz_response String
@@ -221,7 +221,7 @@ model quiz {
 }
 
 model flashcards {
-  flashcard_id    String @id @default(cuid()) @db.Uuid
+  flashcard_id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   flashcard_front String
   flascard_back   String
   author_id       String @db.Uuid

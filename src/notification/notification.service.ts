@@ -3,20 +3,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SocketService } from '../socket/socket.service';
 import { CreateNotificationDto } from '../types/CreateNotification.dto';
 
-type TypeSenderNotif = {
-  recipientId: string;
-  senderId: string | null;
-  content: string;
-};
-
-const allNotifs: TypeSenderNotif[] = [
-  {
-    recipientId: 'u8NErq-9RGvR_1bEAAAC',
-    senderId: 'bt4gMWXyOgBBqya4AAAD',
-    content: 'This is the first notification',
-  },
-];
-
 @Injectable()
 export class NotificationService {
   constructor(
@@ -27,7 +13,7 @@ export class NotificationService {
 
   // return all notifications received by a user
   async getAllNotifications(username: string) {
-    const notifs = await this.prisma.nofitications.findMany({
+    const notifs = await this.prisma.notifications.findMany({
       where: {
         receiver_name: username,
       },
@@ -48,7 +34,7 @@ export class NotificationService {
         }),
         this.prisma.users.findUnique({
           where: {
-            user_id: notification.recipientId,
+            user_id: notification.recipientId!,
           },
           select: {
             name: true,
@@ -56,16 +42,16 @@ export class NotificationService {
         }),
       ]);
       if (senderExist && recipientExist) {
-        await this.prisma.nofitications.create({
+        await this.prisma.notifications.create({
           data: {
             content: notification.content,
-            receiver_name: recipientExist.name!,
-            sender_name: senderExist.name!,
+            receiver_name: recipientExist.name,
+            sender_name: senderExist.name,
             users: {
               connect: {
-                user_id: recipientExist.name!,
-              }
-            }
+                user_id: notification.recipientId,
+              },
+            },
           },
         });
       } else throw new Error('Make sure both user exists!');
