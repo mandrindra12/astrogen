@@ -1,13 +1,11 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { getPublicDir, startDevServer } from '@viktoo/frontend';
-import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
 import RedisStore from 'connect-redis';
+import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
 import Redis from 'ioredis';
+import { AppModule } from './app.module';
 
 const logger = new Logger('Main.ts');
 
@@ -52,14 +50,6 @@ async function bootstrap() {
   );
   app.use(cookieParser());
 
-  app.useStaticAssets(getPublicDir(), {
-    immutable: true,
-    maxAge: '1y',
-    index: false,
-  });
-
-  // Listen after setting up the app.
-  await startDevServer(app);
   await app.listen(selectedPort, selectedIP);
 
   logger.log(`The server is running on http://${selectedIP}:${selectedPort}`);

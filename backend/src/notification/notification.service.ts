@@ -57,7 +57,7 @@ export class NotificationService {
       ]);
       if (senderExist && recipientExist) {
         await this.prisma.nofitications.create({
-          data: {
+          data: {            
             content: notification.content,
             receiver_name: recipientExist.name!,
             sender_name: senderExist.name!,
