@@ -34,7 +34,7 @@ export class UsersService {
     });
 
     const userEntity: UserEntity = instanceToInstance(
-      new UserEntity(userData ?? null),
+      new UserEntity(userData),
       {
         excludeExtraneousValues: true,
       },
@@ -44,7 +44,7 @@ export class UsersService {
 
   async findUserById(userId: string): Promise<UserEntity | null> {
     try {
-      const userData: any | null = await this.prismaService.users.findUnique({
+      const userData: null | any = await this.prismaService.users.findUnique({
         where: { user_id: userId },
         include: { followers: true, followings: true },
       });

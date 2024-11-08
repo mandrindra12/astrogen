@@ -1,13 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { SignUpDto } from './dto/signup.dto';
-import { LoginDto } from './dto/login.dto';
-import { GoogleLoginDto } from './dto/google-login.dto';
-import { Request, Response } from 'express';
 import { JwtService, TokenExpiredError } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
-import { UserEntity } from '../users/entities/user.entity';
+import * as bcrypt from 'bcrypt';
 import { instanceToInstance } from 'class-transformer';
+import { Request, Response } from 'express';
+import { UserEntity } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+import { GoogleLoginDto } from './dto/google-login.dto';
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { AuthEntity } from './entities/auth.entity';
 
 @Injectable()

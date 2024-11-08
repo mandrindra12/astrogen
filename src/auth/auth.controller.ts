@@ -1,23 +1,23 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   Post,
-  Get,
-  Res,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/signup.dto';
-import { NextFunction, Request, Response } from 'express';
-import { LoginDto } from './dto/login.dto';
-import { GoogleLoginDto } from './dto/google-login.dto';
 import { JwtService } from '@nestjs/jwt';
-import { JwtGuard } from './guards/jwt.guard';
-import { UserEntity } from '../users/entities/user.entity';
+import { Request, Response } from 'express';
 import { EmailService } from '../email/email.service';
+import { UserEntity } from '../users/entities/user.entity';
+import { AuthService } from './auth.service';
+import { GoogleLoginDto } from './dto/google-login.dto';
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { AuthEntity } from './entities/auth.entity';
+import { JwtGuard } from './guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
