@@ -32,6 +32,12 @@ CREATE TABLE "_messagesTousers" (
 );
 
 -- CreateTable
+CREATE TABLE "_user_follows" (
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "attachments" (
     "attachment_id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "message_id" UUID NOT NULL,
@@ -201,6 +207,12 @@ CREATE UNIQUE INDEX "_messagesTousers_AB_unique" ON "_messagesTousers"("A" ASC, 
 CREATE INDEX "_messagesTousers_B_index" ON "_messagesTousers"("B" ASC);
 
 -- CreateIndex
+CREATE UNIQUE INDEX "_user_follows_AB_unique" ON "_user_follows"("A" ASC, "B" ASC);
+
+-- CreateIndex
+CREATE INDEX "_user_follows_B_index" ON "_user_follows"("B" ASC);
+
+-- CreateIndex
 CREATE UNIQUE INDEX "sessions_session_token_key" ON "sessions"("session_token" ASC);
 
 -- CreateIndex
@@ -217,6 +229,12 @@ ALTER TABLE "_messagesTousers" ADD CONSTRAINT "_messagesTousers_A_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "_messagesTousers" ADD CONSTRAINT "_messagesTousers_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_user_follows" ADD CONSTRAINT "_user_follows_A_fkey" FOREIGN KEY ("A") REFERENCES "users"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_user_follows" ADD CONSTRAINT "_user_follows_B_fkey" FOREIGN KEY ("B") REFERENCES "users"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "attachments" ADD CONSTRAINT "fk_message_id" FOREIGN KEY ("message_id") REFERENCES "messages"("message_id") ON DELETE CASCADE ON UPDATE NO ACTION;

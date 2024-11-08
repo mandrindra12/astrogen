@@ -19,7 +19,7 @@ type TypeSenderNotif = {
   content: string;
 };
 
-@WebSocketGateway(3001, {
+@WebSocketGateway({
   cors: '*',
 })
 export class AppGateway implements OnGatewayConnection, OnGatewayInit {
