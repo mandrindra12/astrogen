@@ -50,7 +50,7 @@ async function bootstrap() {
   );
   app.use(cookieParser());
 
-  await app.listen(selectedPort, selectedIP);
+  await app.listen(selectedIP);
 
   logger.log(`The server is running on http://${selectedIP}:${selectedPort}`);
 }
