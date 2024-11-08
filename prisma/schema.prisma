@@ -15,8 +15,8 @@ enum gender_enum {
 
 model nofitications {
   notification_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  sender_name     String
-  receiver_name   String
+  sender_name     String   @db.Uuid
+  receiver_name   String   @db.Uuid
   content         String
   date            DateTime @default(now()) @db.Timestamp(6)
   users           users    @relation(fields: [user_id], references: [user_id])
