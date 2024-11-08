@@ -2,7 +2,6 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
-import Redis from 'ioredis';
 import { AppModule } from './app.module';
 
 const logger = new Logger('Main.ts');
@@ -10,8 +9,8 @@ const logger = new Logger('Main.ts');
 const selectedPort = process.env.PORT ?? 80;
 const selectedIP = process.env.IP ?? 'localhost';
 
-const redisURL = process.env.REDIS_URL || 'redis://localhost:6379';
-const redisclient = new Redis(redisURL, {});
+// const redisURL = process.env.REDIS_URL || 'redis://localhost:6379';
+// const redisclient = new Redis(redisURL, {});
 // const redisStore = new RedisStore({
 //   client: redisclient,
 //   ttl: 86400 * 20, // 20 days
@@ -29,7 +28,6 @@ async function bootstrap() {
   // app.set('trust proxy', 'loop back');
   // app.use(
   //   session({
-  //     store: redisStore,
   //     secret: process.env.SESSION_SECRET || 'secret123',
   //     resave: false,
   //     saveUninitialized: false,
