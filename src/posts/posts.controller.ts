@@ -1,38 +1,32 @@
 import {
-  Controller,
-  Post,
-  Body,
-  HttpException,
-  Get,
-  Param,
-  Delete,
-  UseInterceptors,
-  UploadedFiles,
-  UseGuards,
   BadRequestException,
+  Body,
+  Controller,
+  HttpException,
+  Post,
   Req,
-  UseFilters,
-  NotFoundException,
-  ParseUUIDPipe,
   UnauthorizedException,
+  UploadedFiles,
+  UseFilters,
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
-import { PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { CommentPostDto } from './dto/comment-post.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { GetPostsScliceDto } from './dto/get-posts-slice.dto';
-import { ReelsSlice } from './entities/reels-slice.entity';
 import { JwtGuard } from '../auth/guards/jwt.guard';
-import { UsersService } from '../users/users.service';
-import { ViktooRequest } from '../types/RequestTypes/viktoo-request';
 import { FileTypeFilter } from '../multer/filters/file-type.filter';
+import { ViktooRequest } from '../types/RequestTypes/viktoo-request';
+import { UsersService } from '../users/users.service';
 import { CommentsService } from './comments.service';
+import { CommentPostDto } from './dto/comment-post.dto';
+import { CreatePostDto } from './dto/create-post.dto';
 import { GetComsDto } from './dto/get-coms.dto';
+import { GetPostsScliceDto } from './dto/get-posts-slice.dto';
 import { GetSubCommentsDto } from './dto/get-sub-comments.dto';
-import { CommentsSlice } from './entities/comments-slice.entity';
-import { Request } from 'express';
 import { SavePostDto } from './dto/save-post.dto';
+import { CommentsSlice } from './entities/comments-slice.entity';
+import { ReelsSlice } from './entities/reels-slice.entity';
 import { SavedReelsSlice } from './entities/saved-reels-slice.entity';
+import { PostsService } from './posts.service';
 
 @UseGuards(JwtGuard)
 @Controller('posts')
@@ -100,13 +94,13 @@ export class PostsController {
   //find by body content
   @Post('find_desc')
   async findDescription(@Body() payload: GetPostsScliceDto) {
-    if (!payload.description) {
+    if (!payload.body) {
       throw new BadRequestException(
-        'Please provide the wanted post description',
+        'Please provide the wanted post body',
       );
     }
     return await this.postsService.findPostByDescriptionSlice(
-      payload.description,
+      payload.body,
       payload.startPage,
       payload.perPage,
     );

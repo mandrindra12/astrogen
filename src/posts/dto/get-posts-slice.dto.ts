@@ -12,6 +12,6 @@ export class GetPostsScliceDto {
   @IsNumber() @Min(0) startPage!: number;
   @IsNumber() @Min(1) perPage!: number;
   @IsOptional() @IsNotEmpty() title?: string;
-  @IsOptional() @IsNotEmpty() description?: string;
+  @IsOptional() @IsNotEmpty() body?: string;
   @IsOptional() @IsBoolean() saved?: boolean = false;
 }

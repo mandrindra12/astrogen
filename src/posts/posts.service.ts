@@ -1,14 +1,13 @@
 import {
   HttpException,
   Injectable,
-  Post,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { UploadService } from '../upload/upload.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostEntity } from './entities/post.entity';
 import { ReelsSlice } from './entities/reels-slice.entity';
-import { PrismaService } from '../prisma/prisma.service';
-import { UploadService } from '../upload/upload.service';
 import { SavedReelCard } from './entities/saved-reel-card.entity';
 import { SavedReelsSlice } from './entities/saved-reels-slice.entity';
 

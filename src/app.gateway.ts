@@ -13,11 +13,6 @@ import { NotificationService } from './notification/notification.service';
 import { SocketService } from './socket/socket.service';
 import { CreateNotificationDto } from './types/CreateNotification.dto';
 
-type TypeSenderNotif = {
-  recipientId: string;
-  senderId: string | null;
-  content: string;
-};
 
 @WebSocketGateway({
   cors: '*',

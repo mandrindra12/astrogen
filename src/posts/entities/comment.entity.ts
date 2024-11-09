@@ -9,10 +9,11 @@ export class CommentEntity {
   createdAt!: Date;
 
   commentator!: {
-    userId: string;
     username: string;
-    photoUrl: string;
+    avatar: string;
   };
+
+  files?: string;
 
   likers!: string[];
 
@@ -32,9 +33,8 @@ export class CommentEntity {
       createdAt: data.created_at,
 
       commentator: {
-        userId: data.commentator.user_id,
+        avatar: data.commentator.avatar,
         username: data.commentator.name,
-        photoUrl: data.commentator.profile_photo_url,
       },
 
       likers: data.comment_likers,

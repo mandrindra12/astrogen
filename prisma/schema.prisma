@@ -15,10 +15,10 @@ enum gender_enum {
 
 model notifications {
   notification_id String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  sender_name     String  
-  receiver_name   String   
+  sender_name     String
+  receiver_name   String
   content         String
-  date            DateTime @default(now()) @db.Timestamp(6)
+  timestamp       DateTime @default(now()) @db.Timestamp(6)
   users           users    @relation(fields: [user_id], references: [user_id])
   user_id         String   @db.Uuid
 }
@@ -74,7 +74,6 @@ model users {
 
   followers  users[] @relation("user_follows")
   followings users[] @relation("user_follows")
-
   // chat
   messages      messages[]
   conversations conversations[]
@@ -87,7 +86,22 @@ model users {
 
   flashcards flashcards[]
 
-  quiz quiz[]
+  location   String?
+  occupation String?
+  avatar     String? @db.VarChar(255)
+  quiz       quiz[]
+}
+
+enum friend_request_status {
+  pending
+  accepted
+  rejected
+}
+
+model friends {
+  user_id   String                @id @db.Uuid
+  friend_id String[]              @db.Uuid
+  status    friend_request_status
 }
 
 model sessions {
@@ -124,6 +138,7 @@ model posts {
   comments          comments[]
   medias            medias[]
   users_saved_posts users_saved_posts[]
+  files             String?
 }
 
 model users_saved_posts {
@@ -152,6 +167,8 @@ model comments {
   // post
   commented_post    posts?  @relation(fields: [commented_post_id], references: [post_id])
   commented_post_id String? @db.Uuid
+
+  files String[]
 
   // sub comments
   parent_coment     comments? @relation("parent_to_sub_comments", fields: [parent_comment_id], references: [comment_id])

@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsOptional,
+  IsString,
   IsStrongPassword,
 } from 'class-validator';
 import { GenderEnum } from '../../enums/gender.enum';
@@ -17,6 +18,21 @@ export class UpdateUserDto {
   @IsOptional()
   @IsStrongPassword()
   password?: string;
+
+  @Expose()
+  @IsString()
+  occupation: string;
+
+  @Expose()
+  @IsString()
+  location: string;
+
+  @Expose()
+  @IsString()
+  username: string;
+
+  @Expose()
+  avatar: string;
 
   @Expose() @IsOptional() user_account_type?: account_type;
   @Expose() @IsOptional() gender?: GenderEnum;

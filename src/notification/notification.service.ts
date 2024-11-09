@@ -15,8 +15,18 @@ export class NotificationService {
   async getAllNotifications(username: string) {
     const notifs = await this.prisma.notifications.findMany({
       where: {
-        receiver_name: username,
+        user_id: username,
       },
+      select: {     
+        timestamp: true, // rename it to timestamp
+        content: true,
+        sender_name: true,
+        users: {
+          select: {
+            avatar: true,
+          }
+        }
+      }
     });
     return notifs;
   }

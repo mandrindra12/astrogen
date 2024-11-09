@@ -33,10 +33,13 @@ export class AuthController {
       await this.authService.validateSignup(payload);
     if (!user) throw new HttpException('User already exists', 409);
     const { password, ...auth } = user;
-    this.authService.handleJWT(payload, res);
+    const credentials = {...payload, id: user.user_id};
+    const token = await this.authService.handleJWT(credentials, res);
     res.send({
-      success: true,
-      message: `User ${user.name} created successfully`,
+      id: user.user_id,
+      name: user.name,
+      ...token,
+      error: false
     });
   }
 
@@ -49,13 +52,13 @@ export class AuthController {
     if (user.error) {
       res.send({
         error: true,
-        errorMessage: user.errorMessage,
+        message: user.errorMessage,
       });
       return;
     }
-
-    this.authService.handleJWT(payload, res);
-    res.send({error: false, errorMessage: "", user_id: user.user_id, username: user.name});
+    const credentials = { ...payload, id: user.user_id};
+    const token = await this.authService.handleJWT(credentials, res);
+    res.send({error: false, message: "", id: user.user_id, name: user.name, ...token });
   }
 
   @Get('logout')

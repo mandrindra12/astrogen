@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { instanceToInstance } from 'class-transformer';
 import { Request } from 'express';
 import { Strategy } from 'passport-jwt';
-import { LoginDto } from '../dto/login.dto';
 import { ViktooReqUser } from '../../types/RequestTypes/viktoo-req-user';
-import { instanceToInstance } from 'class-transformer';
 import { UsersService } from '../../users/users.service';
+import { LoginDto } from '../dto/login.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -26,8 +26,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     let reqUser = instanceToInstance(
       new ViktooReqUser({
         userId: userInDB.user_id,
-        followingsNumber: userInDB.followings.length,
-        followersNumber: userInDB.followings.length,
+        // followingsNumber: userInDB.followings.length,
+        // followersNumber: userInDB.followings.length,
         ...userInDB,
       }),
       {

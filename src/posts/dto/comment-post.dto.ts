@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CommentPostDto {
   @IsUUID()
@@ -13,4 +13,7 @@ export class CommentPostDto {
 
   @IsNotEmpty()
   body!: string;
+
+  @IsString()
+  files?: string;
 }

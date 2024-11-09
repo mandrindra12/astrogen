@@ -9,12 +9,16 @@ export class UserEntity {
   @Expose() created_at?: Date;
   @Expose() gender!: string;
   @Expose() user_account_type?: UserAccountTypeEnum;
-  @Expose() profile_photo_url?: string;
-  @Expose() cover_photo_url?: string;
-  @Expose() stars?: number;
-  @Expose() followers!: string[];
-  @Expose() followings!: string[];
+  // @Expose() profile_photo_url?: string;
+  // @Expose() cover_photo_url?: string;
+  // @Expose() stars?: number;
+  // @Expose() followers!: string[];
+  // @Expose() followings!: string[];
+  @Expose() friends: string[]
   @Expose() bio?: string;
+  @Expose() avatar?: string;
+  @Expose() localtion?: string;
+  @Expose() occupation?: string;
 
   constructor(init?: Partial<UserEntity>) {
     Object.assign(this, init);
