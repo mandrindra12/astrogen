@@ -8,6 +8,9 @@ CREATE TYPE "conversation_type_enum" AS ENUM ('group', 'one_to_one', 'broadcast'
 CREATE TYPE "file_type_enum" AS ENUM ('image', 'video', 'audio');
 
 -- CreateEnum
+CREATE TYPE "friend_request_status" AS ENUM ('pending', 'accepted', 'rejected');
+
+-- CreateEnum
 CREATE TYPE "gender_enum" AS ENUM ('male', 'female');
 
 -- CreateEnum
@@ -57,6 +60,7 @@ CREATE TABLE "comments" (
     "commentator_id" UUID,
     "commented_post_id" UUID,
     "parent_comment_id" UUID,
+    "files" TEXT[],
 
     CONSTRAINT "comments_pkey" PRIMARY KEY ("comment_id")
 );
@@ -74,12 +78,21 @@ CREATE TABLE "conversations" (
 
 -- CreateTable
 CREATE TABLE "flashcards" (
-    "flashcard_id" UUID NOT NULL,
+    "flashcard_id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "flashcard_front" TEXT NOT NULL,
     "flascard_back" TEXT NOT NULL,
     "author_id" UUID NOT NULL,
 
     CONSTRAINT "flashcards_pkey" PRIMARY KEY ("flashcard_id")
+);
+
+-- CreateTable
+CREATE TABLE "friends" (
+    "user_id" UUID NOT NULL,
+    "friend_id" UUID[],
+    "status" "friend_request_status" NOT NULL,
+
+    CONSTRAINT "friends_pkey" PRIMARY KEY ("user_id")
 );
 
 -- CreateTable
@@ -112,15 +125,15 @@ CREATE TABLE "messages" (
 );
 
 -- CreateTable
-CREATE TABLE "nofitications" (
+CREATE TABLE "notifications" (
     "notification_id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "sender_name" TEXT NOT NULL,
     "receiver_name" TEXT NOT NULL,
     "content" TEXT NOT NULL,
-    "date" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "timestamp" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "user_id" UUID NOT NULL,
 
-    CONSTRAINT "nofitications_pkey" PRIMARY KEY ("notification_id")
+    CONSTRAINT "notifications_pkey" PRIMARY KEY ("notification_id")
 );
 
 -- CreateTable
@@ -141,13 +154,15 @@ CREATE TABLE "posts" (
     "post_category_id" UUID,
     "post_likers" TEXT[],
     "author_id" UUID NOT NULL,
+    "files" TEXT,
+    "supporters" TEXT[],
 
     CONSTRAINT "posts_pkey" PRIMARY KEY ("post_id")
 );
 
 -- CreateTable
 CREATE TABLE "quiz" (
-    "quiz_id" UUID NOT NULL,
+    "quiz_id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "quiz_level" INTEGER NOT NULL,
     "quiz_question" TEXT NOT NULL,
     "quiz_response" TEXT NOT NULL,
@@ -180,6 +195,9 @@ CREATE TABLE "users" (
     "profile_photo_url" TEXT,
     "cover_photo_url" TEXT,
     "user_account_type" "account_type" NOT NULL DEFAULT 'standard',
+    "location" TEXT,
+    "occupation" TEXT,
+    "avatar" VARCHAR(255),
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("user_id")
 );
@@ -258,7 +276,7 @@ ALTER TABLE "medias" ADD CONSTRAINT "medias_media_post_id_fkey" FOREIGN KEY ("me
 ALTER TABLE "messages" ADD CONSTRAINT "fk_conversation_id" FOREIGN KEY ("conversation_id") REFERENCES "conversations"("conversation_id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "nofitications" ADD CONSTRAINT "nofitications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "notifications" ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "posts" ADD CONSTRAINT "posts_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;

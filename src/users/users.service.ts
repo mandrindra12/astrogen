@@ -30,7 +30,6 @@ export class UsersService {
   async findOne(email: string): Promise<UserEntity | null> {
     const userData: any | null = await this.prisma.users.findUnique({
       where: { email },
-      include: { followers: true, followings: true },
     });
 
     const userEntity: UserEntity = instanceToInstance(
