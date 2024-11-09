@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { instanceToInstance } from 'class-transformer';
+import { instanceToInstance, plainToInstance } from 'class-transformer';
 import { PrismaService } from '../prisma/prisma.service';
 import { UploadService } from '../upload/upload.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -10,7 +10,7 @@ import { UserEntity } from './entities/user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    private prismaService: PrismaService,
+    private prisma: PrismaService,
     private uploadService: UploadService,
   ) {}
 
@@ -24,11 +24,11 @@ export class UsersService {
     if (!createUserDto.name) {
       createUserDto.name = createUserDto.email.split('@')[0];
     }
-    return this.prismaService.users.create({ data: createUserDto });
+    return this.prisma.users.create({ data: createUserDto });
   }
 
   async findOne(email: string): Promise<UserEntity | null> {
-    const userData: any | null = await this.prismaService.users.findUnique({
+    const userData: any | null = await this.prisma.users.findUnique({
       where: { email },
       include: { followers: true, followings: true },
     });
@@ -42,22 +42,16 @@ export class UsersService {
     return userEntity;
   }
 
-  async findUserById(userId: string): Promise<UserEntity | null> {
+  async findUserById(userId: string) {
     try {
-      const userData: null | any = await this.prismaService.users.findUnique({
-        where: { user_id: userId },
-        include: { followers: true, followings: true },
+      const user =  await this.prisma.users.findUnique({
+          where: {user_id: userId},
       });
-      if (!userData) return null;
-
-      const userEntity: UserEntity = instanceToInstance(
-        new UserEntity(userData ?? null),
-        {
-          excludeExtraneousValues: true,
-        },
-      );
+      const userEntity = plainToInstance(UserEntity, user);
+      userEntity.joinDate = user.created_at;
       return userEntity;
     } catch (error) {
+      console.log(error);
       throw new BadRequestException(
         'Invalid user id, please enter a valid uuid',
       );
@@ -68,7 +62,7 @@ export class UsersService {
     if (payload.password) {
       payload.password = await bcrypt.hash(payload.password, 6);
     }
-    const user = await this.prismaService.users.update({
+    const user = await this.prisma.users.update({
       where: { email },
       data: payload,
     });
@@ -78,7 +72,7 @@ export class UsersService {
   async updateProfilePhoto(email: string, profilePhoto: Express.Multer.File) {
     const url = await this.uploadService.uploadFile(profilePhoto);
     if (!url) return false;
-    const updated = await this.prismaService.users.update({
+    const updated = await this.prisma.users.update({
       where: { email },
       data: {
         profile_photo_url: url,
@@ -91,7 +85,7 @@ export class UsersService {
     const url = await this.uploadService.uploadFile(coverPhoto);
     if (!url) return false;
 
-    const updated = await this.prismaService.users.update({
+    const updated = await this.prisma.users.update({
       where: { email },
       data: {
         cover_photo_url: url,

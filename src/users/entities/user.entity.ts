@@ -6,7 +6,7 @@ export class UserEntity {
   @Expose() email!: string;
   @Expose() name?: string;
   @Expose() password!: string;
-  @Expose() created_at?: Date;
+  @Expose() joinDate?: Date;
   @Expose() gender!: string;
   @Expose() user_account_type?: UserAccountTypeEnum;
   // @Expose() profile_photo_url?: string;
@@ -19,8 +19,10 @@ export class UserEntity {
   @Expose() avatar?: string;
   @Expose() localtion?: string;
   @Expose() occupation?: string;
+  @Expose() postsNumber: number;
 
   constructor(init?: Partial<UserEntity>) {
     Object.assign(this, init);
   }
+  
 }

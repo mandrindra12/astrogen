@@ -32,7 +32,6 @@ export class AuthController {
     const user: UserEntity | null =
       await this.authService.validateSignup(payload);
     if (!user) throw new HttpException('User already exists', 409);
-    const { password, ...auth } = user;
     const credentials = {...payload, id: user.user_id};
     const token = await this.authService.handleJWT(credentials, res);
     res.send({

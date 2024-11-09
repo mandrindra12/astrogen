@@ -45,6 +45,7 @@ export class PostsController {
     @Req() request: ViktooRequest,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
+    console.log(files);
     const created = await this.postsService.create(
       createPostDto,
       request.user?.email,

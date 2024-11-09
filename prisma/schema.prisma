@@ -72,8 +72,8 @@ model users {
   user_posts    posts[]
   user_comments comments[]
 
-  followers  users[] @relation("user_follows")
-  followings users[] @relation("user_follows")
+  followers     users[]         @relation("user_follows")
+  followings    users[]         @relation("user_follows")
   // chat
   messages      messages[]
   conversations conversations[]
@@ -139,6 +139,7 @@ model posts {
   medias            medias[]
   users_saved_posts users_saved_posts[]
   files             String?
+  supporters        String[]
 }
 
 model users_saved_posts {

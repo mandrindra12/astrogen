@@ -1,42 +1,45 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
+  Param,
   Post,
   Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { GetUserInfosDto } from './dto/get-user-infos.dto';
-import { UserEntity } from './entities/user.entity';
-import { UsersService } from './users.service';
-import { JwtGuard } from '../auth/guards/jwt.guard';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ViktooRequest } from '../types/RequestTypes/viktoo-request';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtGuard } from '../auth/guards/jwt.guard';
+import { ViktooRequest } from '../types/RequestTypes/viktoo-request';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersService } from './users.service';
 
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Post('user_infos')
+  @Get('user_infos/:userId')
   async userInfos(
-    @Body() payload: GetUserInfosDto,
-  ): Promise<UserEntity | { error: string }> {
-    if (!payload.email) {
-      return (
-        (await this.usersService.findUserById(payload.userId)) ?? {
-          error: 'User not found',
-        }
-      );
-    }
-    return (
-      (await this.usersService.findOne(payload.email)) ?? {
-        error: 'User not found',
-      }
-    );
+    @Param('userId') userId: string
+  ) {
+    // if (!payload.email) {
+    //   return (
+    //     (await this.usersService.findUserById(payload.userId)) ?? {
+    //       error: 'User not found',
+    //     }
+    //   );
+    // }
+    // return (
+    //   (await this.usersService.findOne(payload.email)) ?? {
+    //     error: 'User not found',
+    //   }
+    // );
+    const { password, ...user } = await this.usersService.findUserById(userId);
+
+    return user;
   }
 
   @Post('update_user')
