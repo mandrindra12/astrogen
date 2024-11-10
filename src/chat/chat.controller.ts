@@ -33,7 +33,7 @@ export class ChatController {
 
   // get all conversations related to a user
   @UseGuards(JwtGuard)
-  @Get('get-conversations/:userId')
+  @Get('get_conversations/:userId')
   async getConverstations(@Param('userId') userId: string) {
     const conversations = await this.chatService.getConversations(userId);
     return conversations;
