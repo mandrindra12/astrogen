@@ -84,7 +84,7 @@ export class ChatService {
   }
   
   // idk what dis does
-  async createConversation(payload: {content: string,senderId: string, recipientId: string}) {
+  async createConversation(payload: {senderId: string, recipientId: string}) {
     try {
       const [recipientExists, senderExists] = await Promise.all([
         this.prisma.users.findUnique({
@@ -171,43 +171,73 @@ export class ChatService {
   }
   // return all conversation that this user has
   async getConversations(user_id: string) {
-    const users = await this.prisma.users.findMany({
+    // const users = await this.prisma.users.findMany({
+    //   where: {
+    //     user_id,
+    //   },
+    //   select: {
+    //     conversations: {
+    //       select: {
+    //         conversation_id: true,
+    //         users: {
+    //           select: {
+    //             name: true,
+    //             user_id: true,
+    //             avatar: true, 
+    //           },
+    //         },
+    //         messages: {
+    //           select: {
+    //             content: true,
+    //             message_id: true,
+    //             users: {
+    //               select: {
+    //                 user_id: true,
+    //                 name: true,
+    //               },
+    //             },
+    //           },
+    //           orderBy: {
+    //             created_at: 'desc',
+    //           },
+    //           take: 1,
+    //         },
+    //       },
+    //       orderBy: {
+    //         updated_at: 'desc',
+    //       },
+    //     },
+    //   },
+    // });
+    const users = await this.prisma.conversations.findMany({
       where: {
-        user_id,
-      },
-      select: {
-        conversations: {
-          select: {
-            conversation_id: true,
-            users: {
-              select: {
-                name: true,
-                user_id: true,
-              },
-            },
-            messages: {
-              select: {
-                content: true,
-                message_id: true,
-                users: {
-                  select: {
-                    user_id: true,
-                    name: true,
-                  },
-                },
-              },
-              orderBy: {
-                created_at: 'desc',
-              },
-              take: 1,
-            },
-          },
-          orderBy: {
-            updated_at: 'desc',
+        users: {
+          some: {
+            user_id: user_id
           },
         },
       },
-    });
+      select: {
+        conversation_id: true,
+        messages: {
+          select: {
+            content: true,
+            sender_id: true,
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+          take:1
+        },
+        users: {
+          select: {
+            name: true,
+            avatar: true,
+            user_id: true
+          }
+        }
+      }
+    })
     return users;
   }
 }

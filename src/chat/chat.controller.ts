@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, Logger, Param, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, Logger, Param, ParseUUIDPipe, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { CreateConversationDto } from '../types/CreateConversation.dto';
 import { CreateMessageDto } from '../types/CreateMessage.dto';
@@ -12,7 +12,7 @@ export class ChatController {
   @UseGuards(JwtGuard)
   @UsePipes(new ValidationPipe())
   @Post(':conversationId')
-  async newMessage(@Param('conversationId') conversationId: string, @Body() body: CreateMessageDto) {
+  async newMessage(@Param('conversationId', ParseUUIDPipe) conversationId: string, @Body() body: CreateMessageDto) {
     const sentMessage = await this.chatService.sendMessage(body, conversationId);
     return sentMessage;
   }

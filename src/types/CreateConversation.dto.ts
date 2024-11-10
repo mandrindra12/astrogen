@@ -1,18 +1,13 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
 export class CreateConversationDto {
   @IsString()
-  @MinLength(36)
-  @MaxLength(36)
+  @IsUUID()
+  @IsNotEmpty()
   senderId!: string;
 
   @IsString()
-  @MinLength(36)
-  @MaxLength(36)
-  recipientId!: string;
-
-  @IsString()
-  @MinLength(1)
+  @IsUUID()
   @IsNotEmpty()
-  content!: string;
+  recipientId!: string;
 }
