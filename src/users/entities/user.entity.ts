@@ -24,5 +24,4 @@ export class UserEntity {
   constructor(init?: Partial<UserEntity>) {
     Object.assign(this, init);
   }
-  
 }

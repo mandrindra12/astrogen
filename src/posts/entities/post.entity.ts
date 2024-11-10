@@ -9,7 +9,6 @@ export class PostEntity {
     avatar: string | null;
   };
 
-  title!: string;
   body!: string;
 
   files?: string[];
@@ -32,7 +31,6 @@ export class PostEntity {
         authorName: dbData.author.name,
         avatar: dbData.author.avatar,
       },
-      title: dbData.title,
       body: dbData.description,
       files: dbData.medias.map((media: any) => (
         media.fileUrl

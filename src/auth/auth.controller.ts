@@ -57,7 +57,7 @@ export class AuthController {
     }
     const credentials = { ...user, id: user.user_id, name: user.name.replaceAll(' ', '-') };
     const token = await this.authService.handleJWT(credentials, res);
-    res.json({error: false, message: "", id: user.user_id, name: user.name, ...token });
+    res.send({error: false, message: "", id: user.user_id, name: user.name, ...token });
   }
 
   @Get('logout')

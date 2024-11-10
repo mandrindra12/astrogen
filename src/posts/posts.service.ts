@@ -17,7 +17,15 @@ export class PostsService {
     private prismaService: PrismaService,
     private uploadService: UploadService,
   ) {}
-
+  
+  async findByUserId(userId: string) {
+    const userPosts = await this.prismaService.posts.findMany({
+      where: {
+        author_id: userId
+      }
+    });
+    return userPosts;
+  }
   // Making slice login here to avoid code duplication
   slicePosts(
     postsFound: any,
@@ -67,7 +75,6 @@ export class PostsService {
 
           author: { connect: { email: email } },
           title: payload.title,
-          price: payload.price ? parseInt(payload.price) : undefined,
           description: payload.body,
         },
       });

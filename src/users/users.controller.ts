@@ -25,18 +25,7 @@ export class UsersController {
   async userInfos(
     @Param('userId') userId: string
   ) {
-    // if (!payload.email) {
-    //   return (
-    //     (await this.usersService.findUserById(payload.userId)) ?? {
-    //       error: 'User not found',
-    //     }
-    //   );
-    // }
-    // return (
-    //   (await this.usersService.findOne(payload.email)) ?? {
-    //     error: 'User not found',
-    //   }
-    // );
+    console.log("get user_infos");
     const { password, ...user } = await this.usersService.findUserById(userId);
 
     return user;

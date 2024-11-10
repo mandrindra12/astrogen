@@ -2,7 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpException,
+  Param,
+  ParseUUIDPipe,
   Post,
   Req,
   UnauthorizedException,
@@ -24,6 +27,7 @@ import { GetPostsScliceDto } from './dto/get-posts-slice.dto';
 import { GetSubCommentsDto } from './dto/get-sub-comments.dto';
 import { SavePostDto } from './dto/save-post.dto';
 import { CommentsSlice } from './entities/comments-slice.entity';
+import { PostEntity } from './entities/post.entity';
 import { ReelsSlice } from './entities/reels-slice.entity';
 import { SavedReelsSlice } from './entities/saved-reels-slice.entity';
 import { PostsService } from './posts.service';
@@ -76,6 +80,14 @@ export class PostsController {
 
     if (!reels) throw new HttpException('Unable to find posts', 404);
     return reels;
+  }
+
+  @Get('user_posts/:userId')
+  async getUserPost(@Param('userId', ParseUUIDPipe) userId: string) {
+    console.log("get /posts/user_posts/")
+    const dbData = await this.postsService.findByUserId(userId);
+    const userPosts = PostEntity.parseDbData(dbData);
+    return userPosts;
   }
 
   //find by title
