@@ -3,6 +3,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SocketService } from '../socket/socket.service';
 import { CreateMessageDto } from '../types/CreateMessage.dto';
 
+// type messageSent = {
+//   sender: {
+//     name: string;
+//     avatar: string;
+//   },
+//   timestamp: Date,
+//   content: string,
+//   isSeen: boolean,
+//   fileUrl?: string;
+// }
+
 @Injectable()
 export class ChatService {
   private readonly logger = new Logger(ChatService.name);
@@ -55,21 +66,40 @@ export class ChatService {
           messages: {
             select: {
               content: true,
+              created_at: true
             },
             orderBy: {
-              created_at: 'asc',
+              created_at: 'desc',
             },
+            take: 1,
           },
           users: {
+            where: {
+              user_id: senderId
+            },
             select: {
               name: true,
+              avatar: true
             },
           },
         },
       });
+
+      console.log(updatedConversation);
+      const message = {
+        timestamp: updatedConversation.messages[0].created_at,
+        sender: {
+          avatar: updatedConversation.users[0].avatar,
+          name: updatedConversation.users[0].name
+        },
+        content: updatedConversation.messages[0].content,
+        fileUrl: null,
+        isSeen: false,
+      }
+      
       this.socketService.server
         .to(conversation_id)
-        .emit('new-message', messageBody);
+        .emit('new-message', message);
       return {
         error: false,
         conversation: updatedConversation.conversation_id,
