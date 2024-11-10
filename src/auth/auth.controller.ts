@@ -55,7 +55,7 @@ export class AuthController {
       });
       return;
     }
-    const credentials = { ...payload, id: user.user_id};
+    const credentials = { ...user, id: user.user_id, name: user.name.replaceAll(' ', '-') };
     const token = await this.authService.handleJWT(credentials, res);
     res.send({error: false, message: "", id: user.user_id, name: user.name, ...token });
   }
@@ -65,6 +65,8 @@ export class AuthController {
     response.clearCookie('connect.sid');
     response.clearCookie('access_token');
     response.clearCookie('refresh_token');
+    response.clearCookie('id');
+    response.clearCookie('name');
     response.send({
       message: 'disconnected',
     });

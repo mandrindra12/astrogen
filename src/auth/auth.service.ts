@@ -49,8 +49,8 @@ export class AuthService {
     const refreshToken: string = this.jwtService.sign(credentials, {
       secret: process.env.JWT_REFRESH_KEY,
     });
-    res.cookie('name', credentials.name, {httpOnly: true, maxAge: 5000 })
-    res.cookie('id', credentials.id, { httpOnly: true , maxAge: 5000 });
+    res.cookie('name', credentials.name, {httpOnly: true })
+    res.cookie('id', credentials.id, { httpOnly: true });
     res.cookie('access_token', accessToken, { httpOnly: true});
     res.cookie('refresh_token', refreshToken, { httpOnly: true });
     return {login: accessToken, refresh: refreshToken};

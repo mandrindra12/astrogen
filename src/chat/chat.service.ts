@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { SocketService } from '../socket/socket.service';
 import { CreateMessageDto } from '../types/CreateMessage.dto';
@@ -27,10 +27,10 @@ export class ChatService {
         }),
       ]);
       if (!existingConversation) {
-        throw new Error("la conversation n'existe pas");
+        throw new HttpException('Conversation not found!', HttpStatus.BAD_REQUEST);
       }
       if (!existingUser) {
-        throw new Error("l'emetteur n'existe pas!");
+        throw new HttpException('Recipient do not exist!', HttpStatus.BAD_REQUEST);
       }
       const updatedConversation = await this.prisma.conversations.update({
         where: {
@@ -39,7 +39,7 @@ export class ChatService {
         data: {
           messages: {
             create: {
-              recipient_id: messageBody.receiverId,
+              recipient_id: messageBody.recipientId,
               content: messageBody.content,
               sender_id: senderId!,
               users: {
@@ -84,17 +84,17 @@ export class ChatService {
   }
   
   // idk what dis does
-  async createConversation(senderId: string, recipientId: string) {
+  async createConversation(payload: {content: string,senderId: string, recipientId: string}) {
     try {
       const [recipientExists, senderExists] = await Promise.all([
         this.prisma.users.findUnique({
           where: {
-            user_id: recipientId,
+            user_id: payload.recipientId,
           },
         }),
         this.prisma.users.findUnique({
           where: {
-            user_id: senderId,
+            user_id: payload.senderId,
           },
         }),
       ]);
@@ -109,15 +109,16 @@ export class ChatService {
           users: {
             connect: [
               {
-                user_id: recipientId,
+                user_id: payload.recipientId,
               },
               {
-                user_id: senderId,
+                user_id: payload.senderId,
               },
             ],
           },
         },
       });
+      console.log(createdConversation);
       return {
         error: false,
         conversationId: createdConversation.conversation_id,
@@ -141,7 +142,7 @@ export class ChatService {
         },
       });
       if (!conversation) {
-        throw new Error('Cannot find conversation');
+        throw new HttpException('Cannot find conversation', HttpStatus.FORBIDDEN);
       }
       const messages = await this.prisma.conversations.findUnique({
         where: {

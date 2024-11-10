@@ -1,5 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Logger, Param, Post, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, HttpException, Logger, Param, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { CreateConversationDto } from '../types/CreateConversation.dto';
 import { CreateMessageDto } from '../types/CreateMessage.dto';
@@ -22,12 +21,15 @@ export class ChatController {
   @UseGuards(JwtGuard)
   @UsePipes(new ValidationPipe())
   @Post()
-  async createConversation(@Body() messageBody: CreateConversationDto, @Res() res: Response) {
-    this.logger.debug(messageBody);
-    const createdConversation = await this.chatService.createConversation(messageBody.senderId, messageBody.recipientId);
+  async createConversation(@Body() messageBody: CreateConversationDto) {
+    const createdConversation = await this.chatService.createConversation(messageBody);
     this.logger.debug(createdConversation);
-    return res.sendStatus(HttpStatus.OK);
-  }
+    if(createdConversation.error) {
+      throw new HttpException('failed to create message', 500);
+    } else {
+      return createdConversation;
+    }
+ }
 
   // get all conversations related to a user
   @UseGuards(JwtGuard)

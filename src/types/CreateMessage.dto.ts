@@ -6,7 +6,7 @@ export class CreateMessageDto {
   
   @IsNotEmpty()
   @IsString()
-  receiverId!: string;
+  recipientId!: string;
 
   @IsNotEmpty()
   content!: string;
