@@ -49,10 +49,10 @@ export class AuthService {
     const refreshToken: string = this.jwtService.sign(credentials, {
       secret: process.env.JWT_REFRESH_KEY,
     });
-    res.cookie('name', credentials.name, {httpOnly: true })
-    res.cookie('id', credentials.id, { httpOnly: true });
-    res.cookie('access_token', accessToken, { httpOnly: true});
-    res.cookie('refresh_token', refreshToken, { httpOnly: true });
+    res.cookie('name', credentials.name, {httpOnly: true, sameSite: "none", secure: true })
+    res.cookie('id', credentials.id, { httpOnly: true, sameSite: "none", secure: true});
+    res.cookie('access_token', accessToken, { httpOnly: true, sameSite: "none", secure: true});
+    res.cookie('refresh_token', refreshToken, { httpOnly: true ,sameSite: "none", secure: true});
     return {login: accessToken, refresh: refreshToken};
   }
 
